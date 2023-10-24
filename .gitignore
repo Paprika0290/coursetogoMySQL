@@ -189,3 +189,13 @@ application.properties
 # 테스트 코드 및 테스트 관련 파일
 src/test/
 
+build.gradle
+gradlew
+gradlew.bat
+HELP.md
+.settings/org.eclipse.buildship.core.prefs
+.settings/org.eclipse.wst.common.component
+.settings/org.eclipse.wst.common.project.facet.core.xml
+.settings/org.springframework.ide.eclipse.prefs
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
