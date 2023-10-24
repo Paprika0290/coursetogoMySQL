@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="com.coursetogo.mapper.course.CoursePlaceMapper">
+
+ 	<insert id="insertCoursePlace" parameterType="CoursePlaceDTO">
+ 		INSERT INTO course_place (COURSE_ID, PLACE_ID, SELECTION_ORDER) VALUES (Course_seq.currval, #{placeId}, #{selectionOrder})
+ 	</insert>
+ 	
+	<delete id= "deleteCoursePlace" parameterType="int">
+	    DELETE FROM course_place
+	    WHERE course_id = #{courseId}
+	</delete>	
+ 	
+ 	<!-- 코스아이디를 통해 해당 코스에 수록되어있는 장소의 아이디 리스트 반환 -->
+ 	<select id= "getIncludedPlaceListByCourseId" parameterType= "_int">
+ 		SELECT 
+		     c.course_id,
+		     c_p.place_id
+		FROM course c
+		    JOIN course_place c_p ON c_p.course_id = c.course_id
+		WHERE c.course_id = #{courseId}
+ 	</select>
+ 	
+ </mapper>

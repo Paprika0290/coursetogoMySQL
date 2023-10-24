@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="com.coursetogo.mapper.course.CourseMapper">
+	
+	<select id="getAllCourses" parameterType="_int" resultType="CourseInformDTO">
+	  SELECT
+	    c.course_id AS courseId,
+	    u.user_nickname AS userNickName,
+	    c.course_name AS courseName,
+	    c.course_avg_score AS courseAvgScore,
+	    c.course_number AS courseNumber,
+	    c.course_content AS courseContent,
+	    LISTAGG(Course_place.place_id, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS courseIdList,
+	    LISTAGG(place.place_name, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS courseList,
+	    LISTAGG(area.area_name, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS areaNameList,
+	    LISTAGG(category.category_name, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS categoryNameList,
+	    CASE
+	      WHEN user_bookmark_course.BOOKMARK_ID IS NULL THEN 0
+	      ELSE 1
+	    END AS isBookmarked
+	  FROM
+	    Course c
+	    JOIN Course_place ON c.course_id = Course_place.course_id
+	    JOIN place ON Course_place.place_id = place.place_id
+	    JOIN area_place ON place.place_id = area_place.place_id
+	    JOIN category_place ON place.place_id = category_place.place_id
+	    JOIN area ON area_place.area_id = area.area_id
+	    JOIN category ON category_place.category_id = category.category_id
+	    JOIN ctg_user u ON c.user_id = u.user_id
+	    LEFT JOIN user_bookmark_course ON c.course_id = user_bookmark_course.COURSE_ID
+	    		  AND user_bookmark_course.user_id = #{userId}
+	  GROUP BY
+	    c.course_id,
+	    u.user_nickname,
+	    c.course_name,
+	    c.course_content,
+	    c.course_avg_score,
+	    c.course_number,
+	    user_bookmark_course.BOOKMARK_ID
+	</select>
+	
+	<select id= "getCourseCount" resultType= "_int">
+		SELECT count(*)
+		FROM course
+	</select>
+	
+	<select id= "getCourseCountWithArea" parameterType="String" resultType= "_int">
+		SELECT count(DISTINCT c.course_id)
+		FROM
+			course c
+			JOIN course_place c_p ON c_p.course_id = c.course_id
+			JOIN area_place a_p ON a_p.place_id = c_p.place_id
+			JOIN area a ON a.area_id = a_p.area_id
+		WHERE a.area_name = #{areaName}
+		ORDER BY c.course_id
+	</select>
+	
+	<select id="getAllCoursesByPage" parameterType="_int" resultType="CourseInformDTO">
+	  SELECT *
+	  FROM (
+	  	SELECT
+	    c.course_id AS courseId,
+	    u.user_nickname AS userNickName,
+	    c.course_name AS courseName,
+	    c.course_avg_score AS courseAvgScore,
+	    c.course_number AS courseNumber,
+	    c.course_content AS courseContent,
+	    LISTAGG(Course_place.place_id, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS courseIdList,
+	    LISTAGG(place.place_name, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS courseList,
+	    LISTAGG(area.area_name, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS areaNameList,
+	    LISTAGG(category.category_name, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS categoryNameList,
+	    CASE
+	      WHEN user_bookmark_course.BOOKMARK_ID IS NULL THEN 0
+	      ELSE 1
+	    END AS isBookmarked,
+	    row_number() OVER (ORDER BY c.course_id DESC) AS r
+	  FROM
+	    Course c
+	    JOIN Course_place ON c.course_id = Course_place.course_id
+	    JOIN place ON Course_place.place_id = place.place_id
+	    JOIN area_place ON place.place_id = area_place.place_id
+	    JOIN category_place ON place.place_id = category_place.place_id
+	    JOIN area ON area_place.area_id = area.area_id
+	    JOIN category ON category_place.category_id = category.category_id
+	    JOIN ctg_user u ON c.user_id = u.user_id
+	    LEFT JOIN user_bookmark_course ON c.course_id = user_bookmark_course.COURSE_ID
+	    		  AND user_bookmark_course.user_id = #{userId}
+	  GROUP BY
+	    c.course_id,
+	    u.user_nickname,
+	    c.course_name,
+	    c.course_content,
+	    c.course_avg_score,
+	    c.course_number,
+	    user_bookmark_course.BOOKMARK_ID	
+	  ORDER BY
+	  	c.course_id DESC
+	  )
+	  WHERE r BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	<select id="getAllCoursesOfAreaByPage" resultType="CourseInformDTO">
+	  SELECT *
+	  FROM (
+	  	SELECT
+	    c.course_id AS courseId,
+	    u.user_nickname AS userNickName,
+	    c.course_name AS courseName,
+	    c.course_avg_score AS courseAvgScore,
+	    c.course_number AS courseNumber,
+	    c.course_content AS courseContent,
+	    LISTAGG(Course_place.place_id, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS courseIdList,
+	    LISTAGG(place.place_name, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS courseList,
+	    LISTAGG(area.area_name, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS areaNameList,
+	    LISTAGG(category.category_name, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS categoryNameList,
+	    CASE
+	      WHEN user_bookmark_course.BOOKMARK_ID IS NULL THEN 0
+	      ELSE 1
+	    END AS isBookmarked,
+	    row_number() OVER (ORDER BY c.course_id DESC) AS r
+	  FROM
+	    Course c
+	    JOIN Course_place ON c.course_id = Course_place.course_id
+	    JOIN place ON Course_place.place_id = place.place_id
+	    JOIN area_place ON place.place_id = area_place.place_id
+	    JOIN category_place ON place.place_id = category_place.place_id
+	    JOIN area ON area_place.area_id = area.area_id
+	    JOIN category ON category_place.category_id = category.category_id
+	    JOIN ctg_user u ON c.user_id = u.user_id
+	    LEFT JOIN user_bookmark_course ON c.course_id = user_bookmark_course.COURSE_ID
+	    		  AND user_bookmark_course.user_id = #{userId}
+	  GROUP BY
+	    c.course_id,
+	    u.user_nickname,
+	    c.course_name,
+	    c.course_content,
+	    c.course_avg_score,
+	    c.course_number,
+	    user_bookmark_course.BOOKMARK_ID	
+	    
+	  HAVING LISTAGG(area.area_name, ',') WITHIN GROUP (ORDER BY Course_place.place_id) LIKE '%' || #{areaName} || '%'
+	  ORDER BY
+	  	c.course_id DESC
+	  )
+	  WHERE r BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	<select id="getCourseInformByUserId" parameterType="_int" resultType="CourseInformDTO">
+	  SELECT
+	    c.course_id AS courseId,
+	    u.user_nickname AS userNickName,
+	    c.course_name AS courseName,
+	    c.course_avg_score AS courseAvgScore,
+	    c.course_number AS courseNumber,
+	    c.course_content AS courseContent,
+	    LISTAGG(Course_place.place_id, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS courseIdList,
+	    LISTAGG(place.place_name, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS courseList,
+	    LISTAGG(area.area_name, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS areaNameList,
+	    LISTAGG(category.category_name, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS categoryNameList
+	  FROM
+	    Course c
+	    JOIN Course_place ON c.course_id = Course_place.course_id
+	    JOIN place ON Course_place.place_id = place.place_id
+	    JOIN area_place ON place.place_id = area_place.place_id
+	    JOIN category_place ON place.place_id = category_place.place_id
+	    JOIN area ON area_place.area_id = area.area_id
+	    JOIN category ON category_place.category_id = category.category_id
+	    JOIN ctg_user u ON c.user_id = u.user_id
+   	  WHERE
+	  	c.user_id = #{userId} 
+	  GROUP BY
+	    c.course_id,
+	    u.user_nickname,
+	    c.course_name,
+	    c.course_content,
+	    c.course_avg_score,
+	    c.course_number
+	</select>
+	
+	<select id="getBookmarkedCourseInformByUserId" parameterType="_int" resultType="CourseInformDTO">
+	  SELECT
+		b.course_id AS courseId,
+		u.user_nickname AS userNickName,
+		c.course_name AS courseName,
+	    c.course_avg_score AS courseAvgScore,
+	    c.course_number AS courseNumber,
+	    c.course_content AS courseContent,
+	    LISTAGG(c_p.place_id, ',') WITHIN GROUP (ORDER BY c_p.place_id) AS courseIdList,
+	    LISTAGG(p.place_name, ',') WITHIN GROUP (ORDER BY c_p.place_id) AS courseList,
+	    1 AS isBookMarked
+	  FROM
+		user_bookmark_course b
+		JOIN course c ON c.course_id = b.course_id
+		JOIN ctg_user u ON c.user_id = u.user_id
+		JOIN course_place c_p ON c_p.course_id = b.course_id
+		JOIN place p ON p.place_id = c_p.place_id
+	  WHERE
+	  	b.user_id = #{userId} 
+	  GROUP BY
+	    b.course_id,
+	    u.user_nickname,
+	    c.course_name,
+	    c.course_content,
+	    c.course_avg_score,
+	    c.course_number,
+	    b.bookmark_id
+	</select>
+	
+	<select id="getCourseInformByCourseId" parameterType="_int" resultType="CourseInformDTO">
+	  SELECT
+	    c.course_id AS courseId,
+	    u.user_nickname AS userNickName,
+	    c.course_name AS courseName,
+	    c.course_avg_score AS courseAvgScore,
+	    c.course_number AS courseNumber,
+	    c.course_content AS courseContent,
+	    LISTAGG(Course_place.place_id, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS courseIdList,
+	    LISTAGG(place.place_name, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS courseList,
+	    LISTAGG(area.area_name, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS areaNameList,
+	    LISTAGG(category.category_name, ',') WITHIN GROUP (ORDER BY Course_place.selection_order) AS categoryNameList,
+	    CASE
+	      WHEN user_bookmark_course.BOOKMARK_ID IS NULL THEN 0
+	      ELSE 1
+	    END AS isBookMarked
+	  FROM
+	    Course c
+	    JOIN Course_place ON c.course_id = Course_place.course_id
+	    JOIN place ON Course_place.place_id = place.place_id
+	    JOIN area_place ON place.place_id = area_place.place_id
+	    JOIN category_place ON place.place_id = category_place.place_id
+	    JOIN area ON area_place.area_id = area.area_id
+	    JOIN category ON category_place.category_id = category.category_id
+	    JOIN ctg_user u ON c.user_id = u.user_id
+	    LEFT JOIN user_bookmark_course ON c.course_id = user_bookmark_course.COURSE_ID
+	     AND c.user_id = user_bookmark_course.user_id
+	  WHERE
+	    c.course_id = #{courseId}
+	  GROUP BY
+	    c.course_id,
+	    u.user_nickname,
+	    c.course_name,
+	    c.course_content,
+	    c.course_avg_score,
+	    c.course_number,
+	    user_bookmark_course.BOOKMARK_ID
+	</select>
+	
+ 	<select id="getCourseById" parameterType="_int" resultType="CourseDTO"> 	
+	 	SELECT
+		  course_id AS courseId,
+		  user_id AS userId,
+		  course_name AS courseName,
+		  course_content AS courseContent,
+		  course_avg_score AS courseAvgScore,
+		  course_number AS courseNumber
+		  
+		FROM
+		  COURSE 
+		WHERE
+		course_id = #{courseId}		 	
+ 	</select>
+	
+ 	<insert id="insertCourse" parameterType="CourseDTO">
+ 		INSERT INTO course (COURSE_ID, USER_ID, COURSE_NAME, COURSE_AVG_SCORE, COURSE_NUMBER,COURSE_CONTENT)
+ 		VALUES (course_seq.nextval, #{userId}, #{courseName}, 0, #{courseNumber}, #{courseContent})
+ 	</insert>
+		
+	<delete id= "deleteCourse" parameterType="_int">
+	    DELETE FROM course
+	    WHERE course_id = #{courseId}
+	</delete>	
+	
+	<update id= "updateCourseAvgScore" parameterType="_int">
+		UPDATE course
+		SET course_avg_score = (SELECT AVG(course_score) FROM course_review WHERE course_id = #{courseId})
+		WHERE course_id = #{courseId}
+	</update>
+	
+	<!-- 전체 코스 확인 / 페이지네이션(관리자 페이지) -->
+	<select id= "getAllCourseInformForAdminWithPage" resultType="CourseInformDTO">
+	  	SELECT *
+	    FROM (
+			SELECT 
+			    c.course_id AS courseId,
+			    u.user_nickname AS userNickName,
+			    c.course_name AS courseName,
+			    c.course_avg_score AS courseAvgScore,
+			    c.course_number AS courseNumber,
+			    c.course_content AS courseContent,
+			    count(DISTINCT u_b_c.bookmark_id) AS isBookMarked,
+			    row_number() OVER (ORDER BY c.course_id DESC) AS r
+			FROM
+			    course c
+			    JOIN ctg_user u ON c.user_id = u.user_id
+			    JOIN course_place c_p ON c.course_id = c_p.course_id
+			    LEFT JOIN user_bookmark_course u_b_c ON c.course_id = u_b_c.course_id
+			GROUP BY
+			    c.course_id,
+			    u.user_nickname,
+			    c.course_name,
+			    c.course_avg_score,
+			    c.course_number, 
+			    c.course_content
+		)
+	  	WHERE r BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	<!-- 검색된 코스 확인 / 페이지네이션(관리자 페이지) -->
+	<select id= "getCourseInformListByKeywordForAdminWithPage" resultType="CourseInformDTO">
+		SELECT *
+		    FROM (
+				SELECT 
+				    c.course_id AS courseId,
+				    u.user_nickname AS userNickName,
+				    c.course_name AS courseName,
+				    c.course_avg_score AS courseAvgScore,
+				    c.course_number AS courseNumber,
+				    c.course_content AS courseContent,
+				    count(DISTINCT u_b_c.bookmark_id) AS isBookMarked,
+				    row_number() OVER (ORDER BY c.course_id DESC) AS r
+				FROM
+				    course c
+				    JOIN ctg_user u ON c.user_id = u.user_id
+				    JOIN course_place c_p ON c.course_id = c_p.course_id
+				    LEFT JOIN user_bookmark_course u_b_c ON c.course_id = u_b_c.course_id
+	 				<choose>
+			            <when test="category == 'userNickname'">
+			            	WHERE
+			                	u.user_nickname LIKE '%' || #{keyword} || '%'
+               				GROUP BY
+							    c.course_id,
+							    u.user_nickname,
+							    c.course_name,
+							    c.course_avg_score,
+							    c.course_number, 
+							    c.course_content
+			            </when>
+			            <when test="category == 'courseName'">
+			            	WHERE
+			                	c.course_name LIKE '%' || #{keyword} || '%'
+               				GROUP BY
+							    c.course_id,
+							    u.user_nickname,
+							    c.course_name,
+							    c.course_avg_score,
+							    c.course_number, 
+							    c.course_content			                
+			            </when>
+			            <when test="category == 'avgScore'">
+			            	WHERE
+			               	 	c.course_avg_score >= #{keyword}
+               				GROUP BY
+							    c.course_id,
+							    u.user_nickname,
+							    c.course_name,
+							    c.course_avg_score,
+							    c.course_number, 
+							    c.course_content
+			            </when>
+   			            <when test="category == 'bookmarkCount'">
+							GROUP BY
+							    c.course_id,
+							    u.user_nickname,
+							    c.course_name,
+							    c.course_avg_score,
+							    c.course_number, 
+							    c.course_content
+							HAVING 
+			                	count(DISTINCT u_b_c.bookmark_id) >= #{keyword}
+			            </when>
+			        </choose>   
+			)
+		  	WHERE r BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	<!-- 검색된 코스 수 확인(관리자 페이지) -->
+	<select id="getSearchedCourseCount" resultType= "_int">
+		SELECT count(*)
+		FROM (
+			SELECT c.course_id AS courseId
+			FROM
+			    course c
+			    JOIN ctg_user u ON c.user_id = u.user_id
+			    JOIN course_place c_p ON c.course_id = c_p.course_id
+			    LEFT JOIN user_bookmark_course u_b_c ON c.course_id = u_b_c.course_id
+					<choose>
+			            <when test="category == 'userNickname'">
+			            	WHERE
+			                	u.user_nickname LIKE '%' || #{keyword} || '%'
+		             				GROUP BY
+							    c.course_id,
+							    u.user_nickname,
+							    c.course_name,
+							    c.course_avg_score,
+							    c.course_number, 
+							    c.course_content
+			            </when>
+			            <when test="category == 'courseName'">
+			            	WHERE
+			                	c.course_name LIKE '%' || #{keyword} || '%'
+		             				GROUP BY
+							    c.course_id,
+							    u.user_nickname,
+							    c.course_name,
+							    c.course_avg_score,
+							    c.course_number, 
+							    c.course_content			                
+			            </when>
+			            <when test="category == 'avgScore'">
+			            	WHERE
+			               	 	c.course_avg_score >= #{keyword}
+		             				GROUP BY
+							    c.course_id,
+							    u.user_nickname,
+							    c.course_name,
+							    c.course_avg_score,
+							    c.course_number, 
+							    c.course_content
+			            </when>
+			            <when test="category == 'bookmarkCount'">
+							GROUP BY
+							    c.course_id,
+							    u.user_nickname,
+							    c.course_name,
+							    c.course_avg_score,
+							    c.course_number, 
+							    c.course_content
+							HAVING 
+			                	count(DISTINCT u_b_c.bookmark_id) >= #{keyword}
+		            	</when>
+		        </choose>   
+		 )
+	</select>
+	
+	
+     <!-- 유저의 코스 개수 -->
+     <select id="getUserCourseCount" resultType = "_int">
+     	SELECT COUNT(*) FROM course WHERE user_id = #{userId}
+     </select>
+	
+	<!-- 코스작성왕 -->
+	<select id="getCourseTop3" resultType="java.lang.Integer">
+	    <![CDATA[
+		    SELECT countList.user_id
+		    FROM (
+		      SELECT user_id, COUNT(user_id) AS countCourse
+		      FROM course
+		      GROUP BY user_id
+		      HAVING COUNT(user_id) > 1
+		      ORDER BY COUNT(user_id) DESC NULLS LAST
+		    	  ) countList
+		    WHERE ROWNUM <= 3
+		 ]]>
+	</select>
+	
+	<select id= "getCourseNameByCourseId" resultType= "String">
+		SELECT course_name
+		FROM course
+		WHERE course_id = #{courseId}
+	</select>
+	
+	<!-- 코스리뷰 삭제 후 평균별점 업데이트 -->
+	<update id="updateEntireAvgScore">
+		UPDATE course
+		SET course_avg_score = 0
+		WHERE course_avg_score IS NULL
+	</update>
+	
+	<select id="recommendCourseTop5" resultType="CourseDTO">
+	    <![CDATA[
+	        SELECT 
+			  course_id AS courseId,
+			  user_id AS userId,
+			  course_name AS courseName,
+			  course_content AS courseContent,
+			  course_avg_score AS courseAvgScore,
+			  course_number AS courseNumber
+	        FROM (
+	            SELECT *
+	            FROM course
+	            ORDER BY course_avg_score DESC NULLS LAST
+	        )
+	        WHERE ROWNUM <= 5
+	    ]]>
+	</select>	
+ </mapper>
