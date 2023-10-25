@@ -21,3 +21,4 @@
 - ORACLE SQL에서는 WHERE r BETWEEN {시작행} AND {마지막행}으로 페이지네이션을 구현하였으나
 - MYSQL SQL에서는 LIMIT {행의 수} OFFSET {시작행}-1 로 변경되었으므로 코드를 수정.<BR><BR>
 
+8. Oracle : LIKE '%' || #{keyword} || '%' -> MySQL : LIKE CONCAT('%', #{keyword}, '%'))
