@@ -107,9 +107,8 @@ public class CtgUserService {
 	public List<CtgUserDTO> getAllUserListByPage(int pageNum, int pageSize) throws SQLException {
 		List<CtgUserDTO> res = new ArrayList<>();
 		
-		int startRow = ((pageNum-1) * pageSize) + 1;
-		int endRow = ((pageNum-1) * pageSize) + pageSize;
-		res= mapper.getAllUserListByPage(startRow, endRow);
+		int startRow = ((pageNum-1) * pageSize);
+		res= mapper.getAllUserListByPage(startRow, pageSize);
 		
 		if(!res.isEmpty()) {
 		} else {
@@ -122,10 +121,8 @@ public class CtgUserService {
 	public List<CtgUserDTO> getUserListByKeywordWithPage(int pageNum, int pageSize, String category, String keyword) throws SQLException {
 		List<CtgUserDTO> res = new ArrayList<>();
 		
-		int startRow = ((pageNum-1) * pageSize) + 1;
-		int endRow = ((pageNum-1) * pageSize) + pageSize;
-		
-		res= mapper.getUserListByKeywordWithPage(startRow, endRow, category, keyword);
+		int startRow = ((pageNum-1) * pageSize);
+		res= mapper.getUserListByKeywordWithPage(startRow, pageSize, category, keyword);
 		
 		if(!res.isEmpty()) {
 		} else {

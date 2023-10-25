@@ -374,22 +374,14 @@ public class MainController {
 		// reviewController에서 만들어 사용했던 filterNullValues 메서드를 사용, null이 아닌 값들로 배열 생성
 		String[] placeIds = reviewController.filterNullValues(placeId1, placeId2, placeId3, placeId4, placeId5);
 		
+		int courseId = 0;
+		
 		if(placeIds.length < 1) {
 			return "redirect:/course/courseMake";
 		}else {
 			newCourse.setCourseAvgScore(0);
-			courseController.insertCourse(newCourse, placeIds);
-
-			List<CourseInformDTO> courseList = new ArrayList<CourseInformDTO>();
-			
-			try {
-				courseList = courseService.getCourseInformByUserId(userId);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			attributes.addAttribute("courseId", courseList.get(courseList.size()-1).getCourseId());
-			return "redirect:/course/courseDetail";
+			courseId = courseController.insertCourse(newCourse, placeIds);
+			return "redirect:/course/courseDetail?courseId=" + courseId;
 		}
 	}
 	

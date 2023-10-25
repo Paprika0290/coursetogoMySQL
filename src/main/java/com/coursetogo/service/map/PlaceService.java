@@ -120,18 +120,6 @@ public class PlaceService {
 		return res;
 	}
 	
-	
-	public List<PlaceDTO> searchPlacesByCategory(String categoryName) throws SQLException{
-		return mapper.searchPlacesByCategory(categoryName);
-	}
-
-
-	public List<PlaceDTO> searchPlacesByAreaOrCategory(String areaName, String categoryName) throws SQLException{
-		Map<String, String> params = new HashMap<>();
-		params.put("categoryName", categoryName);
-		params.put("areaName", areaName);
-		return mapper.searchPlacesByAreaOrCategory(params);
-	}
 
 	// 전체 장소수 조회
 	public int getAllPlacesCount() throws SQLException{
@@ -142,11 +130,9 @@ public class PlaceService {
 	public List<PlaceInformDTO> getAllPlaceInformListForAdminByPage(int pageNum, int pageSize) throws SQLException {
 		
 		List<PlaceInformDTO> res = new ArrayList<PlaceInformDTO>();
-				
-		int startRow = ((pageNum - 1) * pageSize) + 1;
-		int endRow = ((pageNum - 1) * pageSize) + pageSize;
 		
-		res = mapper.getAllPlaceInformListForAdminByPage(startRow, endRow);
+		int startRow = ((pageNum-1) * pageSize);
+		res = mapper.getAllPlaceInformListForAdminByPage(startRow, pageSize);
 		
 		if(!res.isEmpty()) {
 		} else {
@@ -160,10 +146,8 @@ public class PlaceService {
 																			 int pageNum, int pageSize) throws SQLException {
 		List<PlaceInformDTO> res = new ArrayList<PlaceInformDTO>();
 		
-		int startRow = ((pageNum - 1) * pageSize) + 1;
-		int endRow = ((pageNum - 1) * pageSize) + pageSize;
-		
-		res = mapper.getAllPlaceInformListByKeywordForAdminByPage(category, keyword, startRow, endRow);
+		int startRow = ((pageNum-1) * pageSize);
+		res = mapper.getAllPlaceInformListByKeywordForAdminByPage(category, keyword, startRow, pageSize);
 		
 		if(!res.isEmpty()) {
 		} else {

@@ -282,7 +282,7 @@
 								div.style.backgroundColor = '#7FB3D5';
 								div.style.cursor = 'pointer';
 								document.getElementById('selectedPlaceId5').value = null;
-								place5Selected = false;
+								place5Selected = false; 
 							}else {
 								div.textContent = placeName;
 								div.style.backgroundColor = '#FF962B';
@@ -299,8 +299,10 @@
 			</script>		
 			<input id= "courseName" name= "courseName" class= "courseMakeInputBox" type= "text"
 				   value= "코스 이름" style= "text-align: center; padding: 5px; width: 150px;" onfocus="clearInputValue(this)"><br>
+		 	<span id= "courseNameCheck" style="display:block; font-size: 8pt; width:200px; height:15px; margin-left: 50px; margin-top: 5px; font-family: 'TheJamsil5Bold', sans-serif;"></span>
+				   
 			<textarea id= "courseContent" name= "courseContent" class= "courseMakeInputBox"
-					  style= "margin-top: 10px; font-family: sans-serif; font-size: 10pt; margin-bottom: 10px; padding: 3px 10px;" rows= "10" cols= "30"
+					  style= "font-family: sans-serif; font-size: 10pt; margin-bottom: 10px; padding: 3px 10px;" rows= "7" cols= "35"
 					  onfocus="clearTextAreaValue(this)" maxlength="400">
 이 코스는 어떤 코스인가요?
 			</textarea>
@@ -321,6 +323,40 @@
 	</div>
 	
 	<script>
+	<!-- 코스이름 중복 확인 start -->
+		var courseNameInput = document.getElementById('courseName');
+		
+		courseNameInput.addEventListener('change', function() {
+		    var updatedValue = courseNameInput.value;	
+		    
+ 		      axios.get('/course/courseNameCheck', {
+				  params: {
+					    courseName: updatedValue
+					  }
+					})
+			  .then(function (response) {
+				  var res = response.data;
+				  var courseNameCheckSpan = document.getElementById('courseNameCheck');
+
+				  if(res === 1) {
+					  courseNameCheckSpan.innerHTML = '이미 등록된 코스 이름입니다.';
+					  courseNameCheckSpan.style.color = '#E74C3C';
+				  }else if (res === 0) {
+					  courseNameCheckSpan.innerHTML = '사용 가능한 코스 이름입니다.';
+					  courseNameCheckSpan.style.color = '#138D75';
+				  } else if (res === -1) {
+					  courseNameCheckSpan.innerHTML = '코스 이름은 비어있을 수 없습니다.';
+					  courseNameCheckSpan.style.color = '#E74C3C';
+				    }
+			  })
+			  .catch(function (error) {
+				  console.log("코스이름 검증 불가");
+			  });
+	    })
+		
+	<!-- 코스이름 중복 확인 end -->
+	
+	
 	if(document.getElementById('invalidButton') === null) {
 		document.getElementById('courseMakeButton').addEventListener('click', function(){
 			var placeCount = 0;

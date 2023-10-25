@@ -18,8 +18,8 @@ public interface CtgUserMapper {
 	// 네이버 회원 정보가 맵핑된 CtgUser객체에서 받아온 naverId, userName 이용하여 기존에 존재하는 회원인지 확인하는 메서드----------------------------
 	// 존재하면 : 해당 CtgUser 객체 / 존재하지 않으면 : null	
 	public CtgUserDTO getCtgUserByNaverIdAndName(@Param("naverIdFront") String naverIdFront,
-											  @Param("naverIdRear") String naverIdRear,
-											  @Param("userName") String userName) throws SQLException;	
+											  	 @Param("naverIdRear") String naverIdRear,
+											  	 @Param("userName") String userName) throws SQLException;	
 	
 	
 	// userId를 받아 회원DTO를 가져오는 메서드---------------------------------------------------------------------------------------
@@ -52,7 +52,7 @@ public interface CtgUserMapper {
 	public List<CtgUserDTO> getAllUserListByPage(@Param("startRow") int startRow, @Param("endRow") int endRow) throws SQLException;
 	
 	// 검색된 유저 정보 확인 / 페이지네이션(관리자 페이지)
-	public List<CtgUserDTO> getUserListByKeywordWithPage(@Param("startRow") int startRow, @Param("endRow") int endRow,
+	public List<CtgUserDTO> getUserListByKeywordWithPage(@Param("startRow") int startRow, @Param("pageSize") int pageSize,
 														 @Param("category") String category, @Param("keyword") String keyword) throws SQLException;
 
 	// 검색된 유저 수 확인(관리자 페이지)

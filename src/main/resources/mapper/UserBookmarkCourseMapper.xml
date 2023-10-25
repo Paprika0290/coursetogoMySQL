@@ -6,8 +6,8 @@
  <mapper namespace="com.coursetogo.mapper.user.UserBookmarkCourseMapper">
 
  	<insert id="insertNewBookmark" parameterType="UserBookmarkCourseDTO">
- 		INSERT INTO user_bookmark_course (bookmark_id, user_id, course_id)
- 		VALUES (user_bookmark_course_seq.nextval, #{userId}, #{courseId})
+ 		INSERT INTO user_bookmark_course (user_id, course_id)
+ 		VALUES (#{userId}, #{courseId})
  	</insert>
 		
  	<delete id="deleteBookmark" parameterType="int">

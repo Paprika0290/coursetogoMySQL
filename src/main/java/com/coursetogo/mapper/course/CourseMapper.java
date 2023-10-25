@@ -18,10 +18,10 @@ public interface CourseMapper {
 	public List<CourseInformDTO> getAllCourses(@Param("userId") int userId) throws SQLException;
 	
 	public List<CourseInformDTO> getAllCoursesByPage(@Param("userId") int userId,
-													 @Param("startRow") int startRow, @Param("endRow") int endRow) throws SQLException;
+													 @Param("startRow") int startRow, @Param("pageSize") int pageSize) throws SQLException;
 
 	public List<CourseInformDTO> getAllCoursesOfAreaByPage(@Param("userId") int userId, @Param("areaName") String areaName,
-			 											   @Param("startRow") int startRow, @Param("endRow") int endRow) throws SQLException;
+			 											   @Param("startRow") int startRow, @Param("pageSize") int pageSize) throws SQLException;
 	
 	public int getCourseCount() throws SQLException;
 	public int getCourseCountWithArea(@Param("areaName") String areaName) throws SQLException;
@@ -45,12 +45,12 @@ public interface CourseMapper {
 	public int getUserCourseCount(int userId);
 	
 	// 전체 코스 확인 / 페이지네이션(관리자 페이지)
-	public List<CourseInformDTO> getAllCourseInformForAdminWithPage(@Param("startRow") int startRow, @Param("endRow") int endRow) throws SQLException;	
+	public List<CourseInformDTO> getAllCourseInformForAdminWithPage(@Param("startRow") int startRow, @Param("pageSize") int pageSize) throws SQLException;	
 
 	// 검색된 코스 확인 / 페이지네이션(관리자 페이지)
 	public List<CourseInformDTO> getCourseInformListByKeywordForAdminWithPage
 												(@Param("category") String category, @Param("keyword") String keyword,
-												 @Param("startRow") int startRow, @Param("endRow") int endRow) throws SQLException;	
+												 @Param("startRow") int startRow, @Param("pageSize") int pageSize) throws SQLException;	
 
 	// 검색된 코스 수 확인(관리자 페이지)
 	public int getSearchedCourseCount(@Param("category") String category, @Param("keyword") String keyword) throws SQLException;
@@ -63,6 +63,12 @@ public interface CourseMapper {
 	
 	// 코스리뷰 삭제 후 평균별점 업데이트
 	public void updateEntireAvgScore() throws SQLException;
+	
+	// 코스 정보를 통해 해당 코스 객체 반환
+	public int getcourseIdByInsertedCourseInfo(@Param("userId") int userId, @Param("courseName") String courseName, @Param("courseContent") String courseContent) throws SQLException;
+
+	// 코스이름 중복확인
+	public int courseNameCheck(String courseName) throws SQLException;
 
 
 

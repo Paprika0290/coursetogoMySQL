@@ -47,10 +47,10 @@ public interface CourseReviewMapper {
 	public int getSearchedCourseReviewCount(@Param("category") String category, @Param("keyword") String keyword) throws SQLException;	
 
 	// 전체 코스리뷰리스트 조회 (관리자)
-	public List<CourseReviewDTO> getAllCourseReviewByPage(@Param("startRow") int startRow, @Param("endRow") int endRow) throws SQLException;	
+	public List<CourseReviewDTO> getAllCourseReviewByPage(@Param("startRow") int startRow, @Param("pageSize") int pageSize) throws SQLException;	
 
 	// 검색된 코스리뷰리스트 조회 (관리자)	
-	public List<CourseReviewDTO> getAllCourseReviewByKeywordWithPage(@Param("startRow") int startRow, @Param("endRow") int endRow,
+	public List<CourseReviewDTO> getAllCourseReviewByKeywordWithPage(@Param("startRow") int startRow, @Param("pageSize") int pageSize,
 																	 @Param("category") String category, @Param("keyword") String keyword) throws SQLException;
 	
     // 코스리뷰왕

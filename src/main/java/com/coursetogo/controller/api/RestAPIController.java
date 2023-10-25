@@ -159,6 +159,24 @@ public class RestAPIController {
 		return placeList;
 	}	
 	
+	// course/courseMake 페이지에서 코스이름 중복시 화면에 표시
+	@GetMapping("/course/courseNameCheck")
+	public int coursNameCheck(@RequestParam("courseName") String courseName) {
+		int res = 0;
+		
+		if(courseName == null || courseName == "") {
+			res = -1;
+			return res;
+		}else {
+			try {
+				res = courseService.courseNameCheck(courseName);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return res;
+		}		
+	}
+	
 //	// course/courseMake 페이지에서 area or area + category 검색시 장소리스트 반환
 //	@GetMapping("/place/getPlaceList")
 //	public List<PlaceDTO> getPlaceList(@RequestParam("areaName") String areaName,

@@ -42,10 +42,10 @@ public interface PlaceReviewMapper {
 	public int getSearchedPlaceReviewCount(@Param("category") String category, @Param("keyword") String keyword) throws SQLException;
 
 	// 전체 장소리뷰리스트 조회 (관리자)
-	public List<PlaceReviewDTO> getAllPlaceReviewByPage(@Param("startRow") int startRow, @Param("endRow") int endRow);
+	public List<PlaceReviewDTO> getAllPlaceReviewByPage(@Param("startRow") int startRow, @Param("pageSize") int pageSize);
 
 	// 검색된 장소리뷰리스트 조회 (관리자)
-	public List<PlaceReviewDTO> getAllPlaceReviewByKeywordWithPage(@Param("startRow") int startRow, @Param("endRow") int endRow,
+	public List<PlaceReviewDTO> getAllPlaceReviewByKeywordWithPage(@Param("startRow") int startRow, @Param("pageSize") int pageSize,
 																   @Param("category") String category, @Param("keyword") String keyword);
 
 

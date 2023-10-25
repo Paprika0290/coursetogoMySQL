@@ -25,27 +25,21 @@ public interface PlaceMapper {
 
 	public List<PlaceDTO> searchPlacesByAreaWithPages(@Param("areaName") String areaName,
 													  @Param("startRow") int startRow,
-													  @Param("endRow") int endRow) throws SQLException;
+													  @Param("pageSize") int pageSize) throws SQLException;
 	
 	public List<PlaceDTO> searchPlacesByAreaAndConsonant(@Param("areaName") String areaName,
 														 @Param("con1") String con1, @Param("con2") String con2) throws SQLException;
-	
-	public List<PlaceDTO> searchPlacesByCategory(String categoryName) throws SQLException;
-
-	public List<PlaceDTO> searchPlacesByAreaOrCategory(String categoryName, String areaName) throws SQLException;
-
-	public List<PlaceDTO> searchPlacesByAreaOrCategory(Map<String, String> params) throws SQLException;
 	
 	// 전체 장소수 조회
 	public int getAllPlacesCount() throws SQLException;
 
 	// 전체 장소리스트 조회 (관리자)
 	public List<PlaceInformDTO> getAllPlaceInformListForAdminByPage(@Param("startRow") int startRow,
-													  				@Param("endRow") int endRow) throws SQLException;
+																	@Param("pageSize") int pageSize) throws SQLException;
 	// 키워드로 검색된 장소리스트 조회 (관리자)
 	public List<PlaceInformDTO> getAllPlaceInformListByKeywordForAdminByPage
 														   (@Param("category") String category, @Param("keyword") String keyword,
-															@Param("startRow") int startRow, @Param("endRow") int endRow) throws SQLException;
+															@Param("startRow") int startRow, @Param("pageSize") int pageSize) throws SQLException;
 
 	// 키워드로 검색된 장소 개수 (관리자)	
 	public int getSearchedPlaceCount(@Param("category") String category, @Param("keyword") String keyword) throws SQLException;

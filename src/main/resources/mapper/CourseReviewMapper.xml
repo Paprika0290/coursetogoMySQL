@@ -58,8 +58,8 @@
  	
     <!-- 코스리뷰 등록 -->
  	<insert id="insertCourseReview" parameterType="CourseReviewDTO">
- 		INSERT INTO course_review (course_review_id, course_id, user_id, content,review_date,course_score) 
- 		VALUES (course_review_id_seq.nextval, #{courseId}, #{userId}, #{content}, sysdate, #{courseScore})
+ 		INSERT INTO course_review (course_id, user_id, content,review_date,course_score) 
+ 		VALUES (#{courseId}, #{userId}, #{content}, NOW(), #{courseScore})
  	</insert>
  	
  	<!-- 코스리뷰 수정 -->
@@ -67,7 +67,7 @@
  		UPDATE course_review
  		SET content = #{content}, 
  			course_score = #{courseScore}, 
- 			review_date = sysdate
+ 			review_date = NOW()
  		WHERE course_review_id = #{courseReviewId}
  	</update>
  	
@@ -103,13 +103,13 @@
 			<when test="category == 'userNickname'">
 			JOIN ctg_user u ON u.user_id = c_r.user_id
 		WHERE
-			u.user_nickname LIKE '%' || #{keyword} || '%' 
+			u.user_nickname LIKE CONCAT('%', #{keyword}, '%')
 			</when>
 			
 			<when test="category == 'courseName'">
 			JOIN course c ON c.course_id = c_r.course_id
 		WHERE
-			c.course_name LIKE '%' || #{keyword} || '%'
+			c.course_name LIKE CONCAT('%', #{keyword}, '%')
 			</when>
 			
 			<when test="category == 'score'">
@@ -126,73 +126,63 @@
 
 	<!-- 전체 코스리뷰리스트 조회 (관리자) -->
 	<select id= "getAllCourseReviewByPage" resultType="CourseReviewDTO">
-		SELECT *
-		FROM (
-			SELECT course_review_id AS courseReviewId,
-               user_id AS userId,
-               course_id AS courseId,
-               course_score AS courseScore,
-               content AS content,
-               review_date AS reviewDate,
-               row_number() OVER (ORDER BY course_review_id DESC) AS r
-			FROM course_review
-		)
-		WHERE r BETWEEN #{startRow} AND #{endRow}
+		SELECT course_review_id AS courseReviewId,
+              user_id AS userId,
+              course_id AS courseId,
+              course_score AS courseScore,
+              content AS content,
+              review_date AS reviewDate
+		FROM course_review
+		LIMIT #{pageSize} OFFSET #{startRow}
 	</select>
 
 	<!-- 검색된 코스리뷰리스트 조회 (관리자) -->
 	<select id= "getAllCourseReviewByKeywordWithPage" resultType="CourseReviewDTO">
-		SELECT *
-		FROM (
-			SELECT c_r.course_review_id AS courseReviewId,
-	               c_r.user_id AS userId,
-	               c_r.course_id AS courseId,
-	               c_r.course_score AS courseScore,
-	               c_r.content AS content,
-	               c_r.review_date AS reviewDate,
-	               row_number() OVER (ORDER BY course_review_id DESC) AS r
-   			FROM
-				course_review c_r       
-			<choose>
-				<when test="category == 'userNickname'">
-				JOIN ctg_user u ON u.user_id = c_r.user_id
-			WHERE
-				u.user_nickname LIKE '%' || #{keyword} || '%' 
-				</when>
-				
-				<when test="category == 'courseName'">
-				JOIN course c ON c.course_id = c_r.course_id
-			WHERE
-				c.course_name LIKE '%' || #{keyword} || '%'
-				</when>
-				
-				<when test="category == 'score'">
-			WHERE
-				c_r.course_score >= #{keyword}	
-				</when>
+		SELECT c_r.course_review_id AS courseReviewId,
+               c_r.user_id AS userId,
+               c_r.course_id AS courseId,
+               c_r.course_score AS courseScore,
+               c_r.content AS content,
+               c_r.review_date AS reviewDate,
+  			FROM
+			course_review c_r       
+		<choose>
+			<when test="category == 'userNickname'">
+			JOIN ctg_user u ON u.user_id = c_r.user_id
+		WHERE
+			u.user_nickname LIKE CONCAT('%', #{keyword}, '%')
+			</when>
+			
+			<when test="category == 'courseName'">
+			JOIN course c ON c.course_id = c_r.course_id
+		WHERE
+			c.course_name LIKE CONCAT('%', #{keyword}, '%')
+			</when>
+			
+			<when test="category == 'score'">
+		WHERE
+			c_r.course_score >= #{keyword}	
+			</when>
 
-				<when test="category == 'reviewDate'">
-			WHERE
-				c_r.review_date >= #{keyword}					
-				</when>
-			</choose>	
-		)		
-		WHERE r BETWEEN #{startRow} AND #{endRow}			
+			<when test="category == 'reviewDate'">
+		WHERE
+			c_r.review_date >= #{keyword}					
+			</when>
+		</choose>	
+		LIMIT #{pageSize} OFFSET #{startRow}	
 	</select>
 
 	<!-- 코스리뷰왕 -->
-	<select id="getReviewTop3" resultType="java.lang.Integer">
-    <![CDATA[
+	<select id="getReviewTop3" resultType="_int">
 	    SELECT countList.user_id
 	    FROM (
 	          SELECT user_id, COUNT(user_id) AS countReview
 	          FROM course_review
 	          GROUP BY user_id
 	          HAVING COUNT(user_id) > 1
-	          ORDER BY COUNT(user_id) DESC NULLS LAST
+	          ORDER BY countReview DESC
 	    	  ) countList
-	    WHERE ROWNUM <= 3
-	 ]]>
+	   	LIMIT 3
 	</select>
 
  </mapper>

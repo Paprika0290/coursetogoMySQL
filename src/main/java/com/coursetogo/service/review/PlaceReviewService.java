@@ -110,9 +110,8 @@ public class PlaceReviewService {
 	public List<PlaceReviewDTO> getAllPlaceReviewByPage(int pageNum, int pageSize) throws SQLException {
 		List<PlaceReviewDTO> res = new ArrayList<>();
 		
-		int startRow = ((pageNum-1) * pageSize) + 1;
-		int endRow = ((pageNum-1) * pageSize) + pageSize;
-		res= mapper.getAllPlaceReviewByPage(startRow, endRow);
+		int startRow = ((pageNum-1) * pageSize);
+		res= mapper.getAllPlaceReviewByPage(startRow, pageSize);
 		
 		if(!res.isEmpty()) {
 		} else {
@@ -126,10 +125,8 @@ public class PlaceReviewService {
 																	int pageNum, int pageSize) throws SQLException {
 		List<PlaceReviewDTO> res = new ArrayList<>();
 		
-		int startRow = ((pageNum-1) * pageSize) + 1;
-		int endRow = ((pageNum-1) * pageSize) + pageSize;
-		
-		res= mapper.getAllPlaceReviewByKeywordWithPage(startRow, endRow, category, keyword);
+		int startRow = ((pageNum-1) * pageSize);
+		res= mapper.getAllPlaceReviewByKeywordWithPage(startRow, pageSize, category, keyword);
 		
 		if(!res.isEmpty()) {
 		} else {

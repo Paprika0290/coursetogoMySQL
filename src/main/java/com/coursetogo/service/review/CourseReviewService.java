@@ -121,9 +121,8 @@ public class CourseReviewService {
 	public List<CourseReviewDTO> getAllCourseReviewByPage(int pageNum, int pageSize) throws SQLException {
 		List<CourseReviewDTO> res = new ArrayList<>();
 		
-		int startRow = ((pageNum-1) * pageSize) + 1;
-		int endRow = ((pageNum-1) * pageSize) + pageSize;
-		res= mapper.getAllCourseReviewByPage(startRow, endRow);
+		int startRow = ((pageNum-1) * pageSize);
+		res= mapper.getAllCourseReviewByPage(startRow, pageSize);
 		
 		if(!res.isEmpty()) {
 		} else {
@@ -137,10 +136,8 @@ public class CourseReviewService {
 																	 int pageNum, int pageSize) throws SQLException {
 		List<CourseReviewDTO> res = new ArrayList<>();
 		
-		int startRow = ((pageNum-1) * pageSize) + 1;
-		int endRow = ((pageNum-1) * pageSize) + pageSize;
-		
-		res= mapper.getAllCourseReviewByKeywordWithPage(startRow, endRow, category, keyword);
+		int startRow = ((pageNum-1) * pageSize);
+		res= mapper.getAllCourseReviewByKeywordWithPage(startRow, pageSize, category, keyword);
 		
 		if(!res.isEmpty()) {
 		} else {

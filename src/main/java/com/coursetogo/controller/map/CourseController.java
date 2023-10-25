@@ -43,19 +43,21 @@ public class CourseController {
 	
 	public int insertCourse(CourseDTO course, String[] placeIds) {
 		int result = -1;
+		int courseId = 0;
 		
 		try {
 			result = courseService.insertCourse(course);
+			courseId = courseService.getcourseIdByInsertedCourseInfo(course.getUserId(), course.getCourseName(), course.getCourseContent());
 		} catch (Exception e) {
 			log.warn("새로운 course 만들기 실패");
 			e.printStackTrace();
 		}
 		
 		CoursePlaceDTO coursePlace = null;
-		
+
 		if(result != -1) {			
 			for(int i = 0; i < placeIds.length; i++) {
-				coursePlace = CoursePlaceDTO.builder().courseId(result).placeId(Integer.parseInt(placeIds[i])).selectionOrder(i+1).build();
+				coursePlace = CoursePlaceDTO.builder().courseId(courseId).placeId(Integer.parseInt(placeIds[i])).selectionOrder(i+1).build();
 				try {
 					coursePlaceService.insertCoursePlace(coursePlace);
 				} catch (Exception e) {
@@ -65,7 +67,7 @@ public class CourseController {
 			}
 		}
 		
-		return result; 
+		return courseId; 
 	}
 	
 	
@@ -295,15 +297,6 @@ public class CourseController {
 				listValues.put("totalGroups", totalGroups);
 				listValues.put("category", category);
 				listValues.put("keyword", keyword);
-
-				System.out.println(searchedCourseCount);
-				System.out.println(pageNum);
-				System.out.println(pageSize);
-				System.out.println(groupNum);
-				System.out.println(totalPages);
-				System.out.println(totalGroups);
-				System.out.println(category);
-				System.out.println(keyword);
 		}
 		
 		listValues.put("totalCourseCount", totalCourseCount);

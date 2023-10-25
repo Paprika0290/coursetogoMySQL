@@ -50,9 +50,8 @@ public class CourseService {
 	public List<CourseInformDTO> getAllCoursesByPage(int userId, int pageNum, int pageSize) throws Exception {
 		List<CourseInformDTO> res = new ArrayList<>();
 		
-		int startRow = ((pageNum-1) * pageSize) + 1;
-		int endRow = ((pageNum-1) * pageSize) + pageSize;
-		res= mapper.getAllCoursesByPage(userId, startRow, endRow);
+		int startRow = ((pageNum-1) * pageSize);
+		res = mapper.getAllCoursesByPage(userId, startRow, pageSize);
 		
 		if(!res.isEmpty()) {
 		} else {
@@ -64,9 +63,8 @@ public class CourseService {
 	public List<CourseInformDTO> getCoursesOfAreaByPage(int userId, String areaName, int pageNum, int pageSize) throws Exception {
 		List<CourseInformDTO> res = new ArrayList<>();
 		
-		int startRow = ((pageNum-1) * pageSize) + 1;
-		int endRow = ((pageNum-1) * pageSize) + pageSize;
-		res= mapper.getAllCoursesOfAreaByPage(userId, areaName, startRow, endRow);
+		int startRow = ((pageNum-1) * pageSize);
+		res= mapper.getAllCoursesOfAreaByPage(userId, areaName, startRow, pageSize);
 		
 		if(!res.isEmpty()) {
 		} else {
@@ -177,9 +175,8 @@ public class CourseService {
 	public List<CourseInformDTO> getAllCourseInformForAdminWithPage(int pageNum, int pageSize) throws SQLException {
 		List<CourseInformDTO> res = new ArrayList<>();
 		
-		int startRow = ((pageNum-1) * pageSize) + 1;
-		int endRow = ((pageNum-1) * pageSize) + pageSize;
-		res= mapper.getAllCourseInformForAdminWithPage(startRow, endRow);
+		int startRow = ((pageNum-1) * pageSize);
+		res= mapper.getAllCourseInformForAdminWithPage(startRow, pageSize);
 		
 		if(!res.isEmpty()) {
 		} else {
@@ -193,9 +190,8 @@ public class CourseService {
 												(String category, String keyword, int pageNum, int pageSize) throws SQLException {
 		List<CourseInformDTO> res = new ArrayList<>();
 		
-		int startRow = ((pageNum-1) * pageSize) + 1;
-		int endRow = ((pageNum-1) * pageSize) + pageSize;
-		res= mapper.getCourseInformListByKeywordForAdminWithPage(category, keyword, startRow, endRow);
+		int startRow = ((pageNum-1) * pageSize);
+		res= mapper.getCourseInformListByKeywordForAdminWithPage(category, keyword, startRow, pageSize);
 		
 		if(!res.isEmpty()) {
 		} else {
@@ -217,6 +213,16 @@ public class CourseService {
 	// 코스작성왕
 	public List<Integer> getCourseTop3() throws SQLException	{
 		return mapper.getCourseTop3();
+	}
+	
+	// 코스 정보를 통해 해당 코스 객체 반환
+	public int getcourseIdByInsertedCourseInfo(int userId, String courseName, String courseContent) throws SQLException {
+		return mapper.getcourseIdByInsertedCourseInfo(userId, courseName, courseContent);
+	}
+
+	// 코스이름 중복확인
+	public int courseNameCheck(String courseName) throws SQLException {
+		return mapper.courseNameCheck(courseName);
 	}
 
 
