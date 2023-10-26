@@ -14,7 +14,7 @@
  <BR>
 
 4. REGEXP_LIKE 함수를 REFEXP 연산자로 변경<BR><BR>
-5. ORACLE SQL구문을 짤 때 필요했으나 MYSQL SQL로 변경하며 불필요해진 <![CDATA[]]> 섹션 제거<BR><BR>
+5. ORACLE SQL구문을 짤 때 필요했으나 MYSQL SQL로 변경하며 불필요해진 \<![CDATA[]]\> 섹션 제거<BR><BR>
 
 6. 페이지네이션을 구현할 때 사용했던 구문 일부 변경
 ![image](https://github.com/Paprika0290/coursetogoMySQL/assets/59499235/865c9d4a-b8fa-44cd-a8df-01c6ab33c691) <br>
