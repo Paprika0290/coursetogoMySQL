@@ -90,6 +90,10 @@
 		</div>
 		<div class = "userContent">
 			<div class= "userContentBox" style= "width: 40vw;">
+				<div style= "font-family: 'TheJamsil3Regular', sans-serif; margin: 15px;">
+					<span>- ${userDetail.userNickname}</span>
+					님의&nbsp;&nbsp;<span style= "background-color: #69ADDA; border-radius: 5px; padding: 3px 8px; color: #FFFFFF; font-size: 13pt;">코스</span>
+				</div>
 				<c:forEach items="${courseInformList}" var="courseInform" varStatus="courseSt">
 						<div style= "padding: 10px; margin: 10px; border: 1px solid #E2E2E2; border-radius: 5px; font-family: 'TheJamsil3Regular', sans-serif;">
 							<div style= "display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
@@ -110,6 +114,10 @@
 			</div>
 			
 			<div class= "userContentBox" style= "width: 35vw;">
+				<div style= "font-family: 'TheJamsil3Regular', sans-serif; margin: 15px;">
+					<span>- ${userDetail.userNickname}</span>
+					님의&nbsp;&nbsp;<span style= "background-color: #69ADDA; border-radius: 5px; padding: 3px 8px; color: #FFFFFF; font-size: 13pt;">코스 리뷰</span>
+				</div>
 				<c:forEach items="${courseReviewList}" var="courseReview" varStatus="courseReviewSt">
 					<div style= "padding: 10px; margin: 10px; border: 1px solid #E2E2E2; border-radius: 5px; font-family: 'TheJamsil3Regular', sans-serif;">
 						<div style= "display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
@@ -130,10 +138,14 @@
 			</div>
 			
 			<div class= "userContentBox" style= "width: 20vw;">
+				<div style= "font-family: 'TheJamsil3Regular', sans-serif; margin: 15px;">
+					<span>- ${userDetail.userNickname}</span>
+					님의&nbsp;&nbsp;<span style= "background-color: #69ADDA; border-radius: 5px; padding: 3px 8px; color: #FFFFFF; font-size: 13pt;">장소 리뷰</span>
+				</div>
 				<c:forEach items="${placeReviewList}" var="placeReview" varStatus="placeReviewSt">
 					<div style= "padding: 5px; margin: 10px; border: 1px solid #E2E2E2; border-radius: 5px; font-family: 'TheJamsil3Regular', sans-serif;">
 						<div style= "display: flex; flex-direction: row; align-items: center; margin-top: 5px;">
-							&nbsp;<a href="https://map.naver.com/p/search/${placeNameList.get(placeReviewSt.index)}" style= "text-decoration: none;">${placeNameList.get(placeReviewSt.index)}</a>
+							&nbsp;<a href="https://map.naver.com/p/search/${placeNameList.get(placeReviewSt.index)}" style= "text-decoration: none; color: #373737;">${placeNameList.get(placeReviewSt.index)}</a>
 							&nbsp;&nbsp;&nbsp;<div class="stars small" id= "placeReviewScore${placeReviewSt.index}" style= "font-size: 20px; display: flex;" data-score="${placeReview.placeScore}"></div>
 			                            <script>
 			                               var placeReviewStars = document.getElementById("placeReviewScore${placeReviewSt.index}");

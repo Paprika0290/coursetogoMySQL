@@ -143,8 +143,8 @@
                c_r.course_id AS courseId,
                c_r.course_score AS courseScore,
                c_r.content AS content,
-               c_r.review_date AS reviewDate,
-  			FROM
+               c_r.review_date AS reviewDate
+  		FROM
 			course_review c_r       
 		<choose>
 			<when test="category == 'userNickname'">

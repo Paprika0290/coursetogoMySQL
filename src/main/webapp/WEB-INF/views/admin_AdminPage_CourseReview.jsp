@@ -86,7 +86,7 @@
 		<br><br>
 		<span style= "margin-left: 3%; font-size: 10pt; color: #A7A7A7;"> - 코스리뷰 이름 클릭 시 해당 코스 상세 페이지 조회가 가능합니다.</span><br>
 		<span style= "margin-left: 3%; font-size: 10pt; color: #A7A7A7;"> - 별점 검색은 [검색값 이상의 값을 가진 코스리뷰]를 검색합니다.</span><br>
-		<span style= "margin-left: 3%; font-size: 10pt; color: #A7A7A7;"> - 작성일자 검색은 [검색 일자 이후에 작성된 코스리뷰]를 검색합니다.</span><br><br>		
+		<span style= "margin-left: 3%; font-size: 10pt; color: #A7A7A7;"> - 작성일자 검색은 [검색 일자 이후에 작성된 코스리뷰]를 검색합니다. (검색형식: YYYY-MM-DD)</span><br><br>		
 		<div style= "display: flex; align-items: center;">
 			<select id= "selectedCategory" style= "text-align: center; margin-left: 3%; border: 1px solid #ADADAD; height: 24px;">
 				<option value="entireReview" selected>전체&nbsp;&nbsp;</option>

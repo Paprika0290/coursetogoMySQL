@@ -149,7 +149,6 @@ public class CtgUserController {
 	public String updateUserByAdmin(@ModelAttribute CtgUserDTO user
 							 		,HttpSession session) {
 		CtgUserDTO DBUser = null;
-		System.out.println(user);
 		
 		try {
 			DBUser = service.getCtgUserByUserId(user.getUserId());
