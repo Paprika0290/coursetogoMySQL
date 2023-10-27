@@ -17,4 +17,4 @@
 7. Oracle : LIKE '%' || #{keyword} || '%' -> MySQL : LIKE CONCAT('%', #{keyword}, '%'))
 
 8. MySQL에서 새로 추출한 ERD
-   <img src="https://i.imgur.com/9VYCiTz.png](https://i.imgur.com/rHBzwbn.png)https://i.imgur.com/rHBzwbn.png">
+   <img src="[https://i.imgur.com/9VYCiTz.png](https://i.imgur.com/rHBzwbn.png)https://i.imgur.com/rHBzwbn.png](https://i.imgur.com/yNYanIn.png)https://i.imgur.com/yNYanIn.png">
