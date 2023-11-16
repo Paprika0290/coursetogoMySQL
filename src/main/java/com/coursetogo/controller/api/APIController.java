@@ -38,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
-public class RestAPIController {
+public class APIController {
 	
 	@Autowired
 	private CtgUserService userService; 

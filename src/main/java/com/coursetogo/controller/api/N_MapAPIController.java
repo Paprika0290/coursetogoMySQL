@@ -107,7 +107,7 @@ public class N_MapAPIController {
 	// 코스 MAP 화면에 direction을 표시하기 위해 필요한 CourseDirectionDTO를 반환하는 메서드
 	@ResponseBody
 	@GetMapping("/map/getDirection")
-	public CourseDirectionDTO getDirectionOfCourseByObject(@RequestParam("places") String places) {// placeId의 나열 
+	public CourseDirectionDTO getDirectionOfCourse(@RequestParam("places") String places) {// placeId의 나열 
 		// 최종적으로 반환할 courseDirectionDTO
 		CourseDirectionDTO courseDirection = null;
 		

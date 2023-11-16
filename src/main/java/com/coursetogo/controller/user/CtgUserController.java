@@ -104,6 +104,7 @@ public class CtgUserController {
 												 .userNickname(userForSession.getUserNickname())
 												 .userEmail(userForSession.getUserEmail())
 												 .userPhoto(userForSession.getUserPhoto())
+												 .userAdmin(userForSession.getUserAdmin())
 												 .userIntroduce(userForSession.getUserIntroduce())
 												 .build();
 			
